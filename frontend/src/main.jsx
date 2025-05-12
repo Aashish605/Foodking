@@ -9,19 +9,23 @@ import Aboutus from "./components/nav/Aboutus";
 import Cart_lists from "./components/cart/Cart_lists";
 import AddItems from "./components/additems/Add_items";
 import Adminpanel from "./components/nav/Adminpanel";
-import Login_admin from "./components/login_admin/Login_admin";
 import WrapComponent from './Wrapcomponent.jsx'
+import Protectedroute from './components/protectedroute/Protectedroute.jsx'
+import Signup from "./components/login_admin/Signup";
+import Login from "./components/login_admin/Login";
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path='/' element={<App />}>
     <Route path='' element={<WrapComponent />} />
     <Route path="/contactus" element={<Contactus />} />
     <Route path="/aboutus" element={<Aboutus />} />
-    <Route path="/adminpanel" element={<Adminpanel />} />
+    <Route element={<Protectedroute />}>
+      <Route path="/adminpanel" element={<Adminpanel />} />
+    </Route>
     <Route path="/carting" element={<Cart_lists />} />
     <Route path="/additems" element={<AddItems />} />
-    <Route path="/login" element={<Login_admin />} />
-    {/* <Route path="/reallogin" element={<Reallogin />} /> */}
+    <Route path="/signup" element={<Signup />} />
+    <Route path="/login" element={<Login />} />
   </Route>
 ));
 

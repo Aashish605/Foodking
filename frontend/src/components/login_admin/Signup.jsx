@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
-export default function Login_admin() {
+export default function Signup() {
+  const [username, setUsername] = useState("");
   const [Gmail, setGmail] = useState("");
-  const [Password, setPassword] = useState("");
+  const [password, setpassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [showPassword, setShowpassword] = useState(false);
+  const [showpassword, setShowpassword] = useState(false);
   const [Validpass, setValidpass] = useState({
     hasDigit: false,
     hasCharacter: false,
@@ -16,37 +17,35 @@ export default function Login_admin() {
   });
 
   useEffect(() => {
-    const hasDigit = /[0-9]/.test(Password);
-    const hasCharacter = /[a-zA-Z]/.test(Password);
-    const hasSymbol = /[^\w\s]/.test(Password); // Adjusted regex to not exclude spaces
-    const minLength = Password.length >= 8;
+    const hasDigit = /[0-9]/.test(password);
+    const hasCharacter = /[a-zA-Z]/.test(password);
+    const hasSymbol = /[^\w\s]/.test(password); // Adjusted regex to not exclude spaces
+    const minLength = password.length >= 8;
     setValidpass(hasDigit && hasCharacter && hasSymbol && minLength);
-  }, [Password]);
+  }, [password]);
 
   const handleSignup = async (event) => {
     event.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
-    console.log("this is handlesignup in frontend function");
 
-    if (!Gmail) {
-      console.error("Gmail is required");
-      return; // Prevent form submission if Gmail is empty
-    }
+    if (!Gmail || !username || !Validpass) {
+      setErrorMessage("Gmail/username/password is missing!!!");
 
-    if (!Validpass) {
-      setErrorMessage("Password must meet the required criteria.");
-      return;
+      return; // Prevent form submission if login area is emplty
     }
 
     try {
-      const response = await axios.post("https://foodking-s5cg.vercel.app/signup", {
+      const response = await axios.post("https://fullbackend-liard.vercel.app/signup", {
+        username,
         Gmail,
-        Password,
+        password,
       });
+      console.log("data is submitted very welley!!");
       setSuccessMessage(response.data);
+      setUsername("");
       setGmail("");
-      setPassword("");
+      setpassword("");
     } catch (error) {
       setErrorMessage(
         error.response?.data?.error || "An error occurred. Please try again."
@@ -54,17 +53,39 @@ export default function Login_admin() {
     }
   };
 
-  const togglePasswordVisibility = () => {
-    setShowpassword(!showPassword);
+  const togglepasswordVisibility = () => {
+    setShowpassword(!showpassword);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-400 to-blue-500 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="bg-gray-300 py-4 px-6 text-black text-center font-semibold text-xl tracking-wider">
+        <div className="bg-indigo-600 py-4 px-6 text-white text-center font-semibold text-xl tracking-wider">
           Admin Signup
         </div>
-        <form className="p-6" onSubmit={handleSignup}>
+        <form
+          className="p-6"
+          method="post"
+          onSubmit={handleSignup}
+          action={"/login"}
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="username"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Username
+            </label>
+            <input
+              autoComplete="off"
+              type="text"
+              id="username"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="admin280"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
           <div className="mb-4">
             <label
               htmlFor="Gmail"
@@ -73,6 +94,7 @@ export default function Login_admin() {
               Gmail
             </label>
             <input
+              autoComplete="off"
               type="email"
               id="Gmail"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -85,34 +107,33 @@ export default function Login_admin() {
             {" "}
             {/* Add relative positioning here */}
             <label
-              htmlFor="Password"
+              htmlFor="password"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
-              Password
+              password
             </label>
-            <div className="relative ">
             <input
-              type={showPassword ? "text" : "password"} // Dynamically set input type
-              id="Password"
+              autoComplete="off"
+              type={showpassword ? "text" : "password"} // Dynamically set input type
+              id="password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="********"
-              value={Password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setpassword(e.target.value)}
             />
             <span
-              className="absolute right-2 top-2  cursor-pointer"
-              onClick={togglePasswordVisibility}
+              className="absolute inset-y-0 right-0 bottom-15 md:bottom-8 pr-3 flex items-center cursor-pointer"
+              onClick={togglepasswordVisibility}
             >
-              {showPassword ? (
+              {showpassword ? (
                 <FaEyeSlash className="h-5 w-5 text-gray-500" />
               ) : (
                 <FaEye className="h-5 w-5 text-gray-500" />
               )}
             </span>
-            </div>
             {!Validpass ? (
-              <label className="text-red-500" htmlFor="Password">
-                Password must contain at least 8 characters, including
+              <label className="text-red-500" htmlFor="password">
+                password must contain at least 8 characters, including
                 uppercase, digit & special symbol
               </label>
             ) : null}
@@ -128,6 +149,12 @@ export default function Login_admin() {
               Sign Up
             </button>
             {/* You can add a signup button or link here if needed */}
+            {/* <button
+              className="inline-block align-baseline font-bold text-sm text-indigo-500 hover:text-indigo-800"
+              type="button"
+            >
+              Log In
+            </button> */}
           </div>
         </form>
       </div>
