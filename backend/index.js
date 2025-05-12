@@ -19,8 +19,6 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://arjunadhikari1.com.np",
-      "https://www.arjunadhikari1.com.np",
       "https://foodking-eta.vercel.app/"
     ],
     credentials: true,
@@ -48,7 +46,7 @@ const sessionProperty = {
   saveUninitialized: false,
   cookie: {
     secure: true,
-    httpOnly: true,
+    // httpOnly: true,
     sameSite: "Lax",
     maxAge: 1000 * 60 * 60 * 24,
   },
