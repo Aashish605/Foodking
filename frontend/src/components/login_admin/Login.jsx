@@ -27,7 +27,7 @@ export default function Login() {
       event.preventDefault();
       console.log("this is handleLogin function");
       const response = await axios.post(
-        "https://fullbackend-liard.vercel.app/login",
+        "https://foodking-s5cg.vercel.app/login",
         {
           username,
           password,

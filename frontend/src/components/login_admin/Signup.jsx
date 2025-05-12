@@ -36,7 +36,7 @@ export default function Signup() {
     }
 
     try {
-      const response = await axios.post("https://fullbackend-liard.vercel.app/signup", {
+      const response = await axios.post("https://foodking-s5cg.vercel.app/signup", {
         username,
         Gmail,
         password,

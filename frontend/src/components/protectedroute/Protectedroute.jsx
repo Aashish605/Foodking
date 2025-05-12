@@ -10,7 +10,7 @@ export default function Protectedroute() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get("https://fullbackend-liard.vercel.app/auth/check", {
+        const response = await axios.get("https://foodking-s5cg.vercel.app/auth/check", {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
