@@ -19,7 +19,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://foodking-eta.vercel.app/"
+      "https://foodking-eta.vercel.app"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -46,7 +46,7 @@ const sessionProperty = {
   saveUninitialized: false,
   cookie: {
     secure: true,
-    // httpOnly: true,
+    httpOnly: true,
     sameSite: "Lax",
     maxAge: 1000 * 60 * 60 * 24,
   },
