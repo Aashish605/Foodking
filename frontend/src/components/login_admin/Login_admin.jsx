@@ -40,7 +40,7 @@ export default function Login_admin() {
     }
 
     try {
-      const response = await axios.post("https://backe-liard.vercel.app/signup", {
+      const response = await axios.post("https://foodking-s5cg.vercel.app/signup", {
         Gmail,
         Password,
       });

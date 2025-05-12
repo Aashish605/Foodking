@@ -12,7 +12,7 @@ export default function Adminpanel() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://backe-liard.vercel.app/getorders");
+        const response = await axios.get("https://foodking-s5cg.vercel.app/getorders");
         setData(response.data);
         setLoading(false);
       } catch (err) {
@@ -54,7 +54,7 @@ export default function Adminpanel() {
 
   const handleConfirmPayment = async (orderId) => {
     try {
-      await axios.post("https://backe-liard.vercel.app/confirm-payment", {
+      await axios.post("https://foodking-s5cg.vercel.app/confirm-payment", {
         orderId,
       });
       setConfirmedOrderIds((prevSet) => new Set(prevSet).add(orderId));
@@ -70,7 +70,7 @@ export default function Adminpanel() {
       return;
     }
     try {
-      await axios.patch(`https://backe-liard.vercel.app/orders/${orderId}/paid`, {
+      await axios.patch(`https://foodking-s5cg.vercel.app/orders/${orderId}/paid`, {
         paid: true,
       });
       setData((prevData) =>

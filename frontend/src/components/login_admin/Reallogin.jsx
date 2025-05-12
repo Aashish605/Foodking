@@ -23,7 +23,7 @@ export default function Reallogin() {
   const handleSignup = async (event) => {
     event.preventDefault();
     console.log("this is handlesignup function");
-    await axios.post("https://backe-liard.vercel.app/login", {
+    await axios.post("https://foodking-s5cg.vercel.app/login", {
       Gmail: Gmail,
       Password: Password,
     });
