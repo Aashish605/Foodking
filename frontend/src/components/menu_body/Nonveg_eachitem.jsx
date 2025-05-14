@@ -135,7 +135,7 @@ export default function Special_eachitem() {
                                 ? "/nonvegimg/Mutton-Biryani.webp"
                                 : item.productname === "Mutton-Khana"
                                   ? "/nonvegimg/Mutton-Khana.webp"
-                                  : "/nonvegimg/Mutton-Sekuwa.webp"
+                                  : null
                 }
                 alt="loading"
               />
