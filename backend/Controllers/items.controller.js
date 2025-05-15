@@ -25,7 +25,7 @@ export const postadditems = async (req, res) => {
 export const getdatabase = async (req, res) => {
   try {
     let alldata = await Item.find();
-    console.log("data is send", alldata);
+    // console.log("data is send", alldata);
     res.json(alldata);
   } catch (error) {
     console.error("Error fetching alldata", error);

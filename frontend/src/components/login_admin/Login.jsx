@@ -26,9 +26,9 @@ export default function Login() {
     try {
       event.preventDefault();
       console.log("this is handleLogin function");
-      const response = await axios.post(
-        "https://foodking-s5cg.vercel.app/login",
-        {
+      console.log(username, password);
+
+      const response = await axios.post("http://localhost:8080/logIn",{
           username,
           password,
         },
@@ -40,7 +40,6 @@ export default function Login() {
         }
       );
       if (response.status == 200) {
-        console.log("login successful");
         navigate("/adminpanel");
       } else {
         console.log("Access denied!!");
@@ -118,9 +117,8 @@ export default function Login() {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className={`bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
-                !Validpass ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`bg-indigo-500 hover:bg-indigo-700 cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${!Validpass ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               type="submit"
               disabled={!Validpass}
             >

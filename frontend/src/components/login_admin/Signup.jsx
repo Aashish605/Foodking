@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useForm } from 'react-hook-form';
 import axios from "axios";
 export default function Signup() {
+
+  useEffect(() => {
+    console.log('i am here');
+
+  }, []);
   const [username, setUsername] = useState("");
   const [Gmail, setGmail] = useState("");
   const [password, setpassword] = useState("");
@@ -25,23 +31,28 @@ export default function Signup() {
   }, [password]);
 
   const handleSignup = async (event) => {
+    // console.clear()
+    console.log("here");
     event.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
 
     if (!Gmail || !username || !Validpass) {
       setErrorMessage("Gmail/username/password is missing!!!");
-
       return; // Prevent form submission if login area is emplty
     }
 
     try {
-      const response = await axios.post("https://foodking-s5cg.vercel.app/signup", {
+      console.log(username, Gmail, password)
+      const response = await axios.post("http://localhost:8080/signup", {
         username,
         Gmail,
         password,
+      }, {
+        headers: "application/json"
       });
-      console.log("data is submitted very welley!!");
+      // console.log("data is submitted very welley!!");
+      console.log("chekc");
       setSuccessMessage(response.data);
       setUsername("");
       setGmail("");
@@ -67,7 +78,7 @@ export default function Signup() {
           className="p-6"
           method="post"
           onSubmit={handleSignup}
-          action={"/login"}
+          // action={"/login"}
         >
           <div className="mb-4">
             <label
@@ -140,9 +151,8 @@ export default function Signup() {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className={`bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
-                !Validpass ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`bg-indigo-500 hover:bg-indigo-700 cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${!Validpass ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               type="submit"
               disabled={!Validpass}
             >

@@ -7,30 +7,27 @@ import orderitem from "./Routes/orderitem.Route.js";
 import session from "express-session";
 import passport from "passport";
 import connectMongo from "connect-mongo";
-import localStrategy from "passport-local";
-const LocalStrategy = localStrategy.Strategy; //initializing local strategy
+import { Strategy as LocalStrategy } from "passport-local";
 import loginSchema from "./Models/login.Model.js";
-//use express validation for the backend validation of data.
+import bcrypt from 'bcryptjs'
 
 dotenv.config();
 
 const app = express();
-//middleware
+
 app.use(
   cors({
     origin: [
-      "https://foodking-eta.vercel.app"
+      "https://foodking-eta.vercel.app",
+      "http://localhost:5173"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  }) 
+  })
 );
 
 app.use(express.json());
 
-//Routes
-app.use("/", items);
-app.use("/", orderitem);
 
 //session which is saved in the same database as other data and we save the collection inside the same db.
 const MongoStore = new connectMongo({
@@ -38,88 +35,96 @@ const MongoStore = new connectMongo({
   collectionName: "sessions", // Custom collection for sessions
 });
 
-const sessionProperty = {
-  secure: true,
+app.use(session({
   store: MongoStore,
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,
     httpOnly: true,
-    sameSite: "Lax",
     maxAge: 1000 * 60 * 60 * 24,
-  },
-};
-app.use(session(sessionProperty));
+  }
+}));
 
-//initialize passport and use session
 app.use(passport.initialize());
 app.use(passport.session());
 
-// //Local authentication
-passport.use(new LocalStrategy(loginSchema.authenticate()));
-passport.serializeUser(loginSchema.serializeUser());
-passport.deserializeUser(loginSchema.deserializeUser());
+app.use("/", items);
+app.use("/", orderitem);
 
-//this is post signup
-app.post("/signup", async (req, res) => {
-  try {
-    let { username, Gmail, password } = req.body;
-    if (!Gmail || !password || !username) {
-      return res
-        .status(400)
-        .json({ error: "Username or Gmail or password is missing" });
+
+passport.use(new LocalStrategy(
+  async function (username, password, done) {
+    try {
+      const user = await loginSchema.findOne({ username })
+      if (!user) return done(null, false, { message: "User not found" })
+
+      const isMatch = await bcrypt.compare(password, user.password)
+      if (isMatch) return done(null, user)
+      else return done(null, false, { message: "incorrect password" })
+    } catch (error) {
+      return done(error)
     }
-    const existinguser = await loginSchema.findOne({ Gmail });
-    if (existinguser) {
-      return res.status(400).send("Email is registered already please login");
-    }
-    //password-local-mongoose handle the hashing
-    const newUser = new loginSchema({ username, Gmail });
-    const registeredUser = await loginSchema.register(newUser, password); //this will automatically hashed the password and data is saved internally into the database.
-    console.log(registeredUser);
-    res.status(201).send("Users registered successfully!!!");
-  } catch (error) {
-    console.log("error during user registration", error.message);
-    res
-      .status(500)
-      .json({ error: "Internal sever error.Please try again later." });
   }
-});
+));
 
-// Login post route
-app.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Authentication failed", ...info });
-    }
-    req.logIn(user, (loginErr) => {
-      if (loginErr) {
-        return next(loginErr);
-      }
-      // Session cookie will be set automatically after req.logIn
-      return res.status(200).json({
-        message: "Login successful",
-        user: { id: user._id, username: user.username },
-      });
-    });
-  })(req, res, next);
-});
+passport.serializeUser((user, done) => {
+  console.log("we in searlize");
+  done(null, user._id)
+}
+)
+passport.deserializeUser(async (_id, done) => {
+  try {
+    console.log("in desearlize");
+    const user = await loginSchema.findById(_id);
+    done(null, user)
+  } catch (error) {
+    done(error)
+  }
+}
+)
 
-//login get route
-app.get("/auth/check", (req, res) => {
-  console.log(
-    "Inside /auth/check - req.isAuthenticated():",
-    req.isAuthenticated()
-  );
-  res.json({ isAuthenticated: req.isAuthenticated() });
-});
+app.post("/register", async (req, res) => {
+  try {
+    const data = await loginSchema.find()
+    if (data.length === 0) {
+      const { username, password, Gmail } = req.body;
+      const hashedPass = await bcrypt.hash(password, 10)
+      const newUser = new loginSchema({ username, Gmail, password: hashedPass })
+      console.log("new user", newUser);
+      await newUser.save()
+      res.status(201).json({ message: "user registered" })
+    } else {
+      console.log("data already present")
+    }
+  } catch (error) {
+    res.status(500).json({ error: "error registering asshihs user", message: error })
+  }
+
+})
+
+app.post("/logIn", passport.authenticate("local"), async (req, res) => {
+  console.log("the auth user is : ", req.user);
+  res.status(200).json({
+    message: "login success",
+    username: req.user.username
+  })
+})
+
+app.get("/check", async (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      message: "auth success",
+      username: req.user.username
+    })
+  }
+  else {
+    res.status(401).json({
+      message: "unauth user"
+    })
+  }
+})
+
 
 async function startServer() {
   try {

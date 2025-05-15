@@ -71,7 +71,7 @@ export default function Cart_lists() {
     try {
       setIsOrdering(true);
       const totalAmount = calculateTotal();
-      await axios.post("https://foodking-s5cg.vercel.app/saveorders", {
+      await axios.post("http://localhost:8080/saveorders", {
         items: cartItems,
         totalAmount: totalAmount,
         tableId: tableId,

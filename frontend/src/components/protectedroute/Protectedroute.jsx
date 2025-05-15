@@ -10,14 +10,14 @@ export default function Protectedroute() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get("https://foodking-s5cg.vercel.app/auth/check", {
+        const response = await axios.get("http://localhost:8080/check", {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
         });
         console.log(response.status, response.data.isAuthenticated);
-        if (response.status === 200 && response.data.isAuthenticated) {
+        if (response.status === 200 ) {
           console.log("authentication good");
           setIsAuthenticated(true);
         } else {

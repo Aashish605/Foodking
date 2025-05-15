@@ -42,7 +42,7 @@ export default function Special_eachitem() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://foodking-s5cg.vercel.app/database");
+        const response = await axios.get("http://localhost:8080/database");
         const filterResponse = response.data.filter((item) => item.category === "Drinks")
         setItem(filterResponse.map(item => ({ ...item, Quantity: 1 })));
         console.log(filterResponse.map(item => ({ ...item, Quantity: 1 })));

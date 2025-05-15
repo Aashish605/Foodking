@@ -12,7 +12,7 @@ export default function Adminpanel() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://foodking-s5cg.vercel.app/getorders");
+        const response = await axios.get("http://localhost:8080/getorders");
         setData(response.data);
         setLoading(false);
       } catch (err) {
@@ -54,7 +54,7 @@ export default function Adminpanel() {
 
   const handleConfirmPayment = async (orderId) => {
     try {
-      await axios.post("https://foodking-s5cg.vercel.app/confirm-payment", {
+      await axios.post("http://localhost:8080/confirm-payment", {
         orderId,
       });
       setConfirmedOrderIds((prevSet) => new Set(prevSet).add(orderId));
@@ -70,7 +70,7 @@ export default function Adminpanel() {
       return;
     }
     try {
-      await axios.patch(`https://foodking-s5cg.vercel.app/orders/${orderId}/paid`, {
+      await axios.patch(`http://localhost:8080/orders/${orderId}/paid`, {
         paid: true,
       });
       setData((prevData) =>
