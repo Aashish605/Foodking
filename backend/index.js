@@ -118,13 +118,19 @@ app.post("/logIn", passport.authenticate("local"), async (req, res) => {
       console.error('Session save error:', err);
       return res.status(500).json({ error: "Session save failed" });
     }
+    // Set an additional cookie to verify cookie saving
+    res.cookie('isLoggedIn', 'true', {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    });
     res.status(200).json({
       message: "login success",
       username: req.user.username
     });
   });
 });
-
 app.get("/check", async (req, res) => {
   if (req.user) {
     res.status(200).json({
