@@ -44,7 +44,7 @@ export default function Signup() {
 
     try {
       console.log(username, Gmail, password)
-      const response = await axios.post("http://localhost:8080/signup", {
+      const response = await axios.post("https://foodking-s5cg.vercel.app/signup", {
         username,
         Gmail,
         password,
