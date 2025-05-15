@@ -19,6 +19,7 @@ app.use(
   cors({
     origin: [
       "https://foodking-eta.vercel.app",
+      "https://foodking-s5cg.vercel.app",
       "http://localhost:5173"
     ],
     credentials: true,
@@ -41,10 +42,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-        secure: true,
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-        sameSite: "none"
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    sameSite: "none"
   }
 }));
 
