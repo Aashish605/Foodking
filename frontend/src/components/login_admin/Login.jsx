@@ -28,7 +28,7 @@ export default function Login() {
       console.log("this is handleLogin function");
       console.log(username, password);
 
-      const response = await axios.post("http://localhost:8080/logIn",{
+      const response = await axios.post("https://foodking-s5cg.vercel.app/logIn",{
           username,
           password,
         },
