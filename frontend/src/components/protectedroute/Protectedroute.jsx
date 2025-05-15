@@ -28,9 +28,6 @@ export default function Protectedroute() {
     checkAuth();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (isAuthenticated === true) {
     return <Outlet />;
