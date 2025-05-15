@@ -24,6 +24,8 @@ app.use(
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['set-cookie']
   })
 );
 
@@ -36,17 +38,20 @@ const MongoStore = new connectMongo({
   collectionName: "sessions", // Custom collection for sessions
 });
 
+app.set('trust proxy', 1)
+
 app.use(session({
   store: MongoStore,
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    // domain: "https://foodking-s5cg.vercel.app/",
-    secure: true,
+    secure: true,                           // Required for HTTPS
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    // sameSite: "lax"
+    sameSite: 'none',                      // Required for cross-origin
+    maxAge: 1000 * 60 * 60 * 24 * 7,      // 7 days
+    path: '/',
+    domain: '.vercel.app'                  // Allow cookies across vercel.app subdomains
   }
 }));
 
@@ -108,12 +113,17 @@ app.post("/register", async (req, res) => {
 })
 
 app.post("/logIn", passport.authenticate("local"), async (req, res) => {
-  console.log("the auth user is : ", req.user);
-  res.status(200).json({
-    message: "login success",
-    username: req.user.username
-  })
-})
+  req.session.save((err) => {
+    if (err) {
+      console.error('Session save error:', err);
+      return res.status(500).json({ error: "Session save failed" });
+    }
+    res.status(200).json({
+      message: "login success",
+      username: req.user.username
+    });
+  });
+});
 
 app.get("/check", async (req, res) => {
   if (req.user) {
