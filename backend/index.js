@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: [
       "https://foodking-eta.vercel.app",
-      "https://foodking-s5cg.vercel.app",
+      
       "http://localhost:5173"
     ],
     credentials: true,
