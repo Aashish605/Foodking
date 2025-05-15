@@ -51,7 +51,6 @@ app.use(session({
     sameSite: 'none',                      // Required for cross-origin
     maxAge: 1000 * 60 * 60 * 24 * 7,      // 7 days
     path: '/',
-    domain: '.vercel.app'                  // Allow cookies across vercel.app subdomains
   }
 }));
 
