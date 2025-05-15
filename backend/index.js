@@ -41,10 +41,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-        secure: process.env.NODE_ENV === 'production' ? true : 'auto',
+        secure: true,
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
-        sameSite: "strict",
+        domain: "https://foodking-eta.vercel.app/"
   }
 }));
 
