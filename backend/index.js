@@ -44,7 +44,7 @@ app.use(session({
         secure: true,
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
-        domain: "https://foodking-eta.vercel.app/",
+        domain: 'foodking-s5cg.vercel.app',
         sameSite: "none"
   }
 }));
