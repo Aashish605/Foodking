@@ -43,10 +43,10 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     domain: "https://foodking-s5cg.vercel.app/",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 7,
-    sameSite: "none"
+    sameSite: "lax"
   }
 }));
 
