@@ -15,7 +15,7 @@ export default function Add_Items() {
     event.preventDefault();
     try {
       const response = axios.post(
-        "http://localhost:8080/additems",
+        "https://foodking-s5cg.vercel.app/additems",
         formdata
       );
       alert("Item is added");
