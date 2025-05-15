@@ -19,13 +19,13 @@ app.use(
   cors({
     origin: [
       "https://foodking-eta.vercel.app",
-      
+
       "http://localhost:5173"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['set-cookie']
+    exposedHeaders: ['Set-Cookie']
   })
 );
 
@@ -43,13 +43,14 @@ app.set('trust proxy', 1)
 app.use(session({
   store: MongoStore,
   secret: process.env.SECRET,
-  resave: false,
+  resave: true,              // Changed to true to ensure session is saved
   saveUninitialized: false,
+  proxy: true,               // Trust the reverse proxy
   cookie: {
-    secure: true,                           // Required for HTTPS
+    secure: true,            // Required for HTTPS
     httpOnly: true,
-    sameSite: 'none',                      // Required for cross-origin
-    maxAge: 1000 * 60 * 60 * 24 * 7,      // 7 days
+    sameSite: 'none',       // Required for cross-origin
+    maxAge: 1000 * 60 * 60 * 24 * 7,  // 7 days
     path: '/',
   }
 }));
