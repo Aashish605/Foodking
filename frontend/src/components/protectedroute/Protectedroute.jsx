@@ -9,7 +9,6 @@ export default function Protectedroute() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
         const response = await axios.get("https://foodking-s5cg.vercel.app/check", {
           withCredentials: true,
           headers: {
@@ -24,12 +23,6 @@ export default function Protectedroute() {
           console.log("authentication fails");
           setIsAuthenticated(false);
         }
-      } catch (error) {
-        console.error("Authentication check failed:", error);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
     };
 
     checkAuth();
